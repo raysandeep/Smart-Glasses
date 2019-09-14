@@ -1,4 +1,6 @@
 import azure.cognitiveservices.speech as speechsdk
+import boto3
+import json
 
 # Creates an instance of a speech config with specified subscription key and service region.
 # Replace with your own subscription key and service region (e.g., "westus").
@@ -20,7 +22,7 @@ speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
 
 
 a=1
-
+comprehend = boto3.client(service_name='comprehend', region_name='us-west-2')
 while a==1:
     print("Say something...")
     result = speech_recognizer.recognize_once()
@@ -28,6 +30,8 @@ while a==1:
     # Checks result.
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
         print("Recognized: {}".format(result.text))
+        if result.text is not None:
+            print(json.dumps(comprehend.detect_syntax(Text=result.text, LanguageCode='en'), sort_keys=True, indent=4))
         if  'bye' in result.text:
             a=0
         else:
