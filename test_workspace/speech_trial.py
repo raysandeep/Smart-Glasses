@@ -29,9 +29,14 @@ while a==1:
 
     # Checks result.
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
-        print("Recognized: {}".format(result.text))
+        #print("Recognized: {}".format(result.text))
         if result.text is not None:
-            print(json.dumps(comprehend.detect_syntax(Text=result.text, LanguageCode='en'), sort_keys=True, indent=4))
+            #print(json.dumps(comprehend.detect_syntax(Text=result.text, LanguageCode='en'), sort_keys=True, indent=4))
+            x = comprehend.detect_syntax(Text=result.text, LanguageCode='en')
+            pos = x["SyntaxTokens"]
+            for i in pos:
+                print(i["PartOfSpeech"]["Tag"],'   THE TEXT WAS:', i["Text"])
+
         if  'bye' in result.text:
             a=0
         else:
